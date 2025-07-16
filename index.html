@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth; /* Smooth scrolling */
+            scroll-behavior: smooth;
         }
 
         body {
@@ -336,6 +336,11 @@
             text-align: center;
             z-index: 20;
             perspective: 2000px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero:hover {
+            transform: translate(-50%, -50%) rotateX(10deg) rotateY(10deg);
         }
 
         .hero h1 {
@@ -388,11 +393,26 @@
             50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 30px rgba(0, 204, 255, 1); }
         }
 
-        /* Sections */
+        /* Sections with Parallax Effect */
         section {
             padding: 120px 0;
             position: relative;
             perspective: 2000px;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 204, 255, 0.1), transparent);
+            z-index: -1;
+            transform: translateZ(-200px);
         }
 
         h2 {
@@ -402,6 +422,9 @@
             color: #00ccff;
             text-shadow: 0 0 20px rgba(0, 204, 255, 0.6);
             position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         h2 i {
@@ -414,7 +437,12 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Enhanced Cards */
+        h2.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Enhanced Cards with Hover Zoom and Glow */
         .card {
             background: rgba(255, 255, 255, 0.03);
             padding: 40px;
@@ -425,7 +453,7 @@
             backdrop-filter: blur(12px);
             border: 2px solid rgba(0, 204, 255, 0.25);
             transition: all 0.5s ease;
-            transform-style: preserve-3d;
+            transform-style : preserve-3d;
         }
 
         .card::before {
@@ -445,8 +473,8 @@
         }
 
         .card:hover {
-            transform: translateZ(100px) rotateX(15deg) rotateY(15deg);
-            box-shadow: 0 25px 50px rgba(0, 204, 255, 0.5);
+            transform: translateZ(100px) rotateX(15deg) rotateY(15deg) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 204, 255, 0.5), 0 0 20px rgba(0, 255, 204, 0.7);
             background: rgba(255, 255, 255, 0.08);
         }
 
@@ -578,6 +606,7 @@
             footer p { font-size: 1.1rem; }
             footer .social-links a { font-size: 1.8rem; margin: 0 20px; }
             #dark-mode-toggle { right: 60px; }
+            section::before { transform: translateZ(0); } /* Disable parallax on mobile */
         }
     </style>
 </head>
@@ -613,7 +642,7 @@
                 <li data-tooltip="Check My Projects"><a href="#projects"><i class="fas fa-project-diagram"></i>Projects</a></li>
                 <li data-tooltip="My Experience"><a href="#experience"><i class="fas fa-briefcase"></i>Experience</a></li>
                 <li data-tooltip="Contact Me"><a href="#contact"><i class="fas fa-envelope"></i>Contact</a></li>
-                <li data-tooltip="Connect with Me"><a href="#con"><i class="fas fa-link"></i>Connect</a></li>
+                <li data-tooltip="Connect with Me"><a href="#connect"><i class="fas fa-link"></i>Connect</a></li>
             </ul>
         </nav>
         <div id="dark-mode-toggle">
@@ -629,9 +658,10 @@
         <section id="about">
             <h2><i class="fas fa-user"></i>About Me</h2>
             <div class="card">
-                <p><i class="fas fa-info-circle"></i>Aspiring Full-Stack Developer skilled in crafting responsive, scalable web applications. Passionate about problem-solving, debugging, and collaborative innovation.</p>
+                <p><i class="fas fa-info-circle"></i>Aspiring Full-Stack Developer skilled in building responsive and scalable web applications. Strong in problem-solving, debugging, and team collaboration.</p>
                 <p><i class="fas fa-graduation-cap"></i>Bachelor of Computer Application, Muzaffarnagar (May 2023 - Present)</p>
                 <p><i class="fas fa-school"></i>Intermediate (12th Grade), Muzaffarnagar (May 2022)</p>
+                <p><i class="fas fa-link"></i><a href="https://www.linkedin.com/in/ali-saqulain-7404a8287/">Portfolio Demo (LinkedIn)</a></p>
             </div>
         </section>
 
@@ -641,11 +671,14 @@
                 <div class="card"><i class="fab fa-html5"></i>HTML5, CSS3</div>
                 <div class="card"><i class="fab fa-js"></i>JavaScript</div>
                 <div class="card"><i class="fab fa-react"></i>ReactJS, NextJS</div>
+                <div class="card"><i class="fab fa-react"></i>React Native</div>
+                <div class="card"><i class="fab fa-python"></i>Python, Django</div>
                 <div class="card"><i class="fab fa-node"></i>Node.js, Express.js</div>
                 <div class="card"><i class="fas fa-database"></i>MySQL, MongoDB</div>
-                <div class="card"><i class="fab fa-git-alt"></i>Git, GitHub</div>
+                <div class="card"><i class="fab fa-git-alt"></i>Git, GitHub, VSCode</div>
                 <div class="card"><i class="fab fa-bootstrap"></i>Bootstrap, Tailwind CSS</div>
                 <div class="card"><i class="fas fa-code-branch"></i>C, C++</div>
+                <div class="card"><i class="fas fa-server"></i>API Development</div>
                 <div class="card"><i class="fas fa-bug"></i>Debugging & Problem-Solving</div>
             </div>
         </section>
@@ -655,24 +688,44 @@
             <div class="project-grid">
                 <div class="card" data-project="airbnb">
                     <h3><i class="fas fa-home"></i>Airbnb-like Web Application</h3>
-                    <p><i class="fas fa-tools"></i>HTML5, CSS3, Bootstrap, JS, Node.js, Express, Cloud Storage</p>
-                    <p><i class="fas fa-info"></i>A full-stack accommodation booking platform with a sleek UI.</p>
+                    <p><i class="fas fa-tools"></i>HTML5, CSS3, Bootstrap, JavaScript, Node.js, Express, Cloud Storage</p>
+                    <p><i class="fas fa-info"></i>Developed a full-stack web application for booking accommodations, similar to Airbnb. Built a backend API with Node.js and Express.js, integrating cloud storage. Responsive UI using Bootstrap.</p>
                     <a href="https://github.com/Alisaqulain/Airbn-website"><i class="fab fa-github"></i>GitHub</a>
                     <a href="https://airbn-website-1.onrender.com/listings"><i class="fas fa-link"></i>Demo</a>
                 </div>
                 <div class="card" data-project="video">
                     <h3><i class="fas fa-video"></i>Apna Video Call Web Application</h3>
                     <p><i class="fas fa-tools"></i>React, Node.js, Express, WebRTC, Socket.io, Cloud Storage</p>
-                    <p><i class="fas fa-info"></i>Real-time video calling with peer-to-peer connectivity.</p>
+                    <p><i class="fas fa-info"></i>Developed a real-time video calling web application with WebRTC for peer-to-peer connectivity and Socket.io for signaling. Responsive front-end with React.</p>
                     <a href="https://tinyurl.com/complete-code"><i class="fab fa-github"></i>GitHub</a>
                     <a href="https://tinyurl.com/video-web"><i class="fas fa-link"></i>Demo</a>
                 </div>
                 <div class="card" data-project="zerodha">
                     <h3><i class="fas fa-chart-line"></i>Zerodha Clone</h3>
                     <p><i class="fas fa-tools"></i>React, Node.js, Express, MongoDB, Bootstrap, Material-UI</p>
-                    <p><i class="fas fa-info"></i>A trading platform clone with interactive UI.</p>
+                    <p><i class="fas fa-info"></i>Developed a feature-rich trading platform clone with an interactive UI using React, Bootstrap, and Material-UI. Deployed on Render.</p>
                     <a href="https://github.com/Alisaqulain/Zerodha-"><i class="fab fa-github"></i>GitHub</a>
                     <a href="https://zerodha-6.onrender.com/"><i class="fas fa-link"></i>Demo</a>
+                </div>
+                <div class="card" data-project="chatapp">
+                    <h3><i class="fas fa-comments"></i>ChatApp – WhatsApp Clone</h3>
+                    <p><i class="fas fa-tools"></i>React Native, Firebase, Expo, React Navigation, AsyncStorage</p>
+                    <p><i class="fas fa-info"></i>Built a fully responsive real-time chat application using React Native and Firebase. Implemented navigation, authentication, and persistent storage with AsyncStorage.</p>
+                    <a href="https://github.com/Alisaqulain/chatApp"><i class="fab fa-github"></i>GitHub</a>
+                </div>
+                <div class="card" data-project="krishikutumb">
+                    <h3><i class="fas fa-leaf"></i>KrishiKutumb Website</h3>
+                    <p><i class="fas fa-tools"></i>HTML5, CSS3</p>
+                    <p><i class="fas fa-info"></i>Built an agriculture-focused static site for a local initiative with a fully responsive layout.</p>
+                    <a href="https://www.krishikutumb.com/"><i class="fas fa-link"></i>Live Site</a>
+                </div>
+                <div class="card" data-project="mztechnicals">
+                    <h3><i class="fas fa-cogs"></i>MZ Technicals Website</h3>
+                    <p><i class="fas fa-tools"></i>HTML5, CSS3</p>
+                    <p><i class="fas fa-info"></i>Custom-built technical company website with a fully responsive layout.</p>
+                    <a href="https://mztechnicals.com/" target="_blank">
+  <i class="fas fa-link"></i>Live Site
+</a>
                 </div>
             </div>
         </section>
@@ -680,13 +733,23 @@
         <section id="experience">
             <h2><i class="fas fa-briefcase"></i>Experience</h2>
             <div class="card">
+                <h3><i class="fas fa-laptop-code"></i>Full-Stack Developer Intern</h3>
+                <p><i class="fas fa-map-marker-alt"></i>Genex Corporate Services | Remote</p>
+                <p><i class="fas fa-calendar-alt"></i>March 2025 - July 2025</p>
+                <ul>
+                    <li><i class="fas fa-check"></i>Developed GenBore and Vorksinta company websites using React.js as solo projects.</li>
+                    <li><i class="fas fa-check"></i>Contributed to the Internsta platform (similar to Internshala), initially built with Next.js, later migrated to Django.</li>
+                    <li><i class="fas fa-check"></i>Worked collaboratively on front-end, backend, and deployment-ready features.</li>
+                </ul>
+            </div>
+            <div class="card">
                 <h3><i class="fas fa-chalkboard-teacher"></i>Computer Programming Instructor</h3>
                 <p><i class="fas fa-map-marker-alt"></i>Yash Computer Education Center | Muzaffarnagar (U.P)</p>
                 <p><i class="fas fa-calendar-alt"></i>August 2023 - Present</p>
                 <ul>
-                    <li><i class="fas fa-check"></i>Instructed students in HTML5, CSS3, JavaScript, C, C++</li>
-                    <li><i class="fas fa-check"></i>Designed hands-on coding exercises and projects</li>
-                    <li><i class="fas fa-check"></i>Mentored students in debugging and problem-solving</li>
+                    <li><i class="fas fa-check"></i>Instructed students in HTML5, CSS3, JavaScript, C, C++.</li>
+                    <li><i class="fas fa-check"></i>Designed hands-on coding exercises and projects.</li>
+                    <li><i class="fas fa-check"></i>Mentored students in debugging and problem-solving.</li>
                 </ul>
             </div>
         </section>
@@ -700,7 +763,7 @@
             </div>
         </section>
 
-        <section id="con">
+       <section id="con">
             <h2><i class="fas fa-envelope"></i>connect</h2>
             <div class="card">
                 <p>Follow me and check out my work on these platforms:</p>
@@ -725,7 +788,7 @@
         gsap.to('#loading-screen', {
             opacity: 0,
             duration: 1,
-            delay: 2, // Reduced from 3s to 2s
+            delay: 2,
             ease: 'power4.in',
             onComplete: () => document.getElementById('loading-screen').style.display = 'none'
         });
@@ -798,7 +861,7 @@
 
         // Typing Effect for Hero Section
         const typingText = document.getElementById('typing-text');
-        const phrases = ["Full-Stack Developer Extraordinaire", "Web Development Enthusiast", "Code & Innovation Lover"];
+        const phrases = ["Full-Stack Developer Extraordinaire", "Web & Mobile App Enthusiast", "Code & Innovation Lover"];
         let phraseIndex = 0;
         let charIndex = 0;
 
@@ -823,7 +886,7 @@
             }
         }
 
-        setTimeout(type, 2500); // Start after loading screen
+        setTimeout(type, 2500);
 
         // Dark Mode Toggle
         const darkModeToggle = document.getElementById('dark-mode-toggle');
@@ -831,6 +894,25 @@
             document.body.classList.toggle('dark-mode');
             darkModeToggle.querySelector('i').classList.toggle('fa-moon');
             darkModeToggle.querySelector('i').classList.toggle('fa-sun');
+        });
+
+        // Scroll-Triggered Section Heading Animation
+        document.querySelectorAll('section h2').forEach(h2 => {
+            gsap.fromTo(h2, 
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power4.out',
+                    scrollTrigger: {
+                        trigger: h2,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    onComplete: () => h2.classList.add('visible')
+                }
+            );
         });
 
         // Ultimate Three.js Background with Particle Connections
@@ -846,11 +928,10 @@
         pointLight.position.set(0, 0, 100);
         scene.add(pointLight);
 
-        // Enhanced Particles with Connections
         const particleGeometry = new THREE.DodecahedronGeometry(0.8, 0);
         const particleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ccff, wireframe: true });
         const particles = [];
-        const particleCount = 150; // Reduced for performance, increased connections
+        const particleCount = 150;
         for (let i = 0; i < particleCount; i++) {
             const particle = new THREE.Mesh(particleGeometry, particleMaterial);
             particle.position.set((Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800);
@@ -860,7 +941,6 @@
             scene.add(particle);
         }
 
-        // Particle Connections
         const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.3 });
         const connections = [];
         function updateConnections() {
@@ -879,7 +959,6 @@
             }
         }
 
-        // Dynamic Spheres
         const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
         const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true });
         const spheres = [];
@@ -891,7 +970,6 @@
             scene.add(sphere);
         }
 
-        // Pulsating Rings
         const ringGeometry = new THREE.TorusGeometry(30, 0.8, 16, 100);
         const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x00ccff, wireframe: true });
         const rings = [];
@@ -903,7 +981,6 @@
             scene.add(ring);
         }
 
-        // Project Cubes
         const projectGeometry = new THREE.IcosahedronGeometry(15, 0);
         const projectMaterial = new THREE.MeshPhongMaterial({ color: 0x00ffcc, wireframe: true });
         const projectCubes = [];
@@ -915,7 +992,6 @@
             scene.add(cube);
         });
 
-        // Animated Lines
         const lineGeometry = new THREE.BufferGeometry().setFromPoints([
             new THREE.Vector3(0, -100, 0),
             new THREE.Vector3(0, 100, 0)
@@ -930,7 +1006,6 @@
             scene.add(line);
         }
 
-        // Glowing Orbs
         const orbGeometry = new THREE.SphereGeometry(8, 16, 16);
         const orbMaterial = new THREE.MeshBasicMaterial({ color: 0x00b3ff, wireframe: true });
         const orbs = [];
@@ -949,6 +1024,12 @@
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             pointLight.position.x = mouseX * 80;
             pointLight.position.y = mouseY * 80;
+
+            // 3D Tilt Effect for Hero Section
+            const hero = document.querySelector('.hero');
+            const tiltX = mouseY * 15;
+            const tiltY = -mouseX * 15;
+            gsap.to(hero, { rotationX: tiltX, rotationY: tiltY, duration: 0.5, ease: 'power2.out' });
         });
 
         function animate() {
@@ -1015,7 +1096,7 @@
             duration: 1.5,
             stagger: 0.25,
             ease: 'elastic.out(1, 0.6)',
-            delay: 2.5 // Adjusted for 2s loading
+            delay: 2.5
         });
 
         let lastScroll = 0;
